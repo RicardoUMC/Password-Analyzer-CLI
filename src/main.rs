@@ -1,4 +1,5 @@
 use clap::Parser;
+use colored::*;
 use regex::Regex;
 
 #[derive(Parser)]
@@ -25,7 +26,80 @@ fn has_symbol(password: &str) -> bool {
 }
 
 fn valid_length(password: &str) -> bool {
-    password.len() >= 8
+    password.len() >= 10
+}
+
+fn score_password(password: &str) -> u8 {
+    let mut score: u8 = 0;
+
+    let length = if valid_length(password) {
+        score += 1;
+        "✓".green()
+    } else {
+        "✘".red()
+    };
+
+    let upper = if has_upper(password) {
+        score += 1;
+        "✓".green()
+    } else {
+        "✘".red()
+    };
+
+    let lower = if has_lower(password) {
+        score += 1;
+        "✓".green()
+    } else {
+        "✘".red()
+    };
+
+    let number = if has_number(password) {
+        score += 1;
+        "✓".green()
+    } else {
+        "✘".red()
+    };
+
+    let symbol = if has_symbol(password) {
+        score += 1;
+        "✓".green()
+    } else {
+        "✘".red()
+    };
+
+    println!();
+    println!("{} Valid length (>=10)", length);
+    println!("{} Has uppercase", upper);
+    println!("{} Has lowercase", lower);
+    println!("{} Has numbers", number);
+    println!("{} Has symbols", symbol);
+
+    score
+}
+
+fn print_strength_bar(score: u8) {
+    let total_block = 10;
+    let filled = score * 2;
+    let empty = total_block - filled;
+
+    let bar = format! {
+        "[{}{}]",
+        "■".repeat(filled as usize),
+        "-".repeat(empty as usize)
+    };
+
+    let (color_bar, label) = match score {
+        0..=2 => (bar.red(), "Weak".red()),
+        3 => (bar.yellow(), "Medium".yellow()),
+        4..=5 => (bar.green(), "Strong".green()),
+        _ => (bar.normal(), "Unknown".normal()),
+    };
+
+    let percentage = score * 20;
+    println!(
+        "\nPassowrd strength: {} {}% ({})",
+        color_bar, percentage, label
+    );
 }
 
 fn main() {
@@ -35,9 +109,6 @@ fn main() {
 
     println!("--- Security Analysis ---");
 
-    println!("✔  Valid length (>=8): {}", valid_length(password));
-    println!("✔  Has uppercase: {}", has_upper(password));
-    println!("✔  Has lowercase: {}", has_lower(password));
-    println!("✔  Has numbers: {}", has_number(password));
-    println!("✔  Has symbols: {}", has_symbol(password));
+    let score = score_password(password);
+    print_strength_bar(score);
 }
