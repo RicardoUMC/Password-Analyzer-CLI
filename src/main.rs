@@ -83,7 +83,31 @@ fn score_password(password: &str) -> u8 {
     println!("{} Has numbers", number);
     println!("{} Has symbols", symbol);
 
+    if score < 5 {
+        print_suggestions(password);
+    }
+
     score
+}
+
+fn print_suggestions(password: &str) {
+    println!("\n{}", "Suggestions to improve your password:".yellow());
+
+    if !valid_length(password) {
+        println!("{}", "- Make it at least 10 characters long.".yellow());
+    }
+    if !has_upper(password) {
+        println!("{}", "- Include at least one uppercase letter.".yellow());
+    }
+    if !has_lower(password) {
+        println!("{}", "- Include at least one lowercase letter.".yellow());
+    }
+    if !has_number(password) {
+        println!("{}", "- Include at least one number.".yellow());
+    }
+    if !has_symbol(password) {
+        println!("{}", "- Include at least one special character (e.g., !@#$%^&*).".yellow());
+    }
 }
 
 fn print_strength_bar(score: u8) {
