@@ -1,3 +1,9 @@
+use std::{
+    collections::HashSet,
+    fs::File,
+    io::{BufRead, BufReader},
+};
+
 use clap::Parser;
 use colored::*;
 use regex::Regex;
@@ -7,6 +13,9 @@ use regex::Regex;
 #[command(about = "Analize password strength", long_about = None)]
 struct Args {
     password: String,
+
+    #[arg(short, long)]
+    common: Option<String>,
 }
 
 fn has_upper(password: &str) -> bool {
@@ -102,6 +111,17 @@ fn print_strength_bar(score: u8) {
     );
 }
 
+fn load_common_passwords(path: &str) -> HashSet<String> {
+    let file = File::open(path).expect("Failed to open common passwords file.");
+    let reader = BufReader::new(file);
+
+    reader
+        .lines()
+        .filter_map(|line| line.ok())
+        .map(|line| line.trim().to_string())
+        .collect()
+}
+
 fn main() {
     let args = Args::parse();
     let password = &args.password;
@@ -109,6 +129,21 @@ fn main() {
 
     println!("--- Security Analysis ---");
 
-    let score = score_password(password);
-    print_strength_bar(score);
+    let common_passwords = args.common.as_ref().map(|path| load_common_passwords(path));
+
+    if let Some(list) = common_passwords {
+        match list.contains(password) {
+            true => {
+                println!("{}", "⚠️ This password is too common!".red().bold());
+                print_strength_bar(0);
+            }
+            false => {
+                let score = score_password(password);
+                print_strength_bar(score);
+            }
+        }
+    } else {
+        let score = score_password(password);
+        print_strength_bar(score);
+    }
 }
