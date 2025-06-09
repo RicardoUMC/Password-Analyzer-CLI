@@ -47,10 +47,10 @@ fn valid_length(password: &str) -> bool {
 fn generate_password(length: usize) -> String {
     let mut rng = rng();
 
-    let lowercase = "abcdefghijklmnopqrstuvwxyz".chars().collect::<Vec<_>>();
-    let uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".chars().collect::<Vec<_>>();
-    let digits = "0123456789".chars().collect::<Vec<_>>();
-    let specials = "!@#$%^&*()-_+=.".chars().collect::<Vec<_>>();
+    let lowercase: Vec<char> = "abcdefghijklmnopqrstuvwxyz".chars().collect();
+    let uppercase: Vec<char> = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".chars().collect();
+    let digits: Vec<char> = "0123456789".chars().collect();
+    let specials: Vec<char> = "!@#$%^&*()-_+=.".chars().collect();
 
     let mut all_chars = lowercase.clone();
     all_chars.extend(&uppercase);
