@@ -1,21 +1,26 @@
+use clap::Parser;
+use colored::*;
+use rand::prelude::*;
+use rand::rng;
+use regex::Regex;
 use std::{
     collections::HashSet,
     fs::File,
     io::{BufRead, BufReader},
 };
 
-use clap::Parser;
-use colored::*;
-use regex::Regex;
-
 #[derive(Parser)]
 #[command(name = "passcheck")]
 #[command(about = "Analize password strength", long_about = None)]
 struct Args {
-    password: String,
+    #[arg(help = "Password to check", required = false)]
+    password: Option<String>,
 
-    #[arg(short, long)]
+    #[arg(short, long, help = "Path to list (wordlist) of common passowrds")]
     common: Option<String>,
+
+    #[arg(short, long, help = "Generate a strong password instead")]
+    generate: bool,
 }
 
 fn has_upper(password: &str) -> bool {
@@ -36,6 +41,49 @@ fn has_symbol(password: &str) -> bool {
 
 fn valid_length(password: &str) -> bool {
     password.len() >= 10
+}
+
+fn generate_password(length: usize) -> String {
+    let mut rng = rng();
+
+    let lowercase = "abcdefghijklmnopqrstuvwxyz".chars().collect::<Vec<_>>();
+    let uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".chars().collect::<Vec<_>>();
+    let digits = "0123456789".chars().collect::<Vec<_>>();
+    let specials = "!@#$%^&*()-_+=.".chars().collect::<Vec<_>>();
+
+    let mut all_chars = lowercase.clone();
+    all_chars.extend(&uppercase);
+    all_chars.extend(&digits);
+    all_chars.extend(&specials);
+
+    let mut password = vec![
+        *lowercase.choose(&mut rng).unwrap(),
+        *uppercase.choose(&mut rng).unwrap(),
+        *digits.choose(&mut rng).unwrap(),
+        *specials.choose(&mut rng).unwrap(),
+    ];
+
+    for _ in 0..(length - 4) {
+        password.push(*all_chars.choose(&mut rng).unwrap());
+    }
+
+    password.shuffle(&mut rng);
+    password.into_iter().collect()
+}
+
+fn analyze(password: &str, common_file: &Option<String>) {
+    let common_passwords = common_file.as_ref().map(|path| load_common_passwords(path));
+
+    if let Some(set) = common_passwords {
+        if set.contains(password) {
+            println!("{}", "⚠️ This password is too common!".red().bold());
+            print_strength_bar(0);
+            return;
+        }
+    }
+
+    let score = score_password(password);
+    print_strength_bar(score);
 }
 
 fn score_password(password: &str) -> u8 {
@@ -106,7 +154,10 @@ fn print_suggestions(password: &str) {
         println!("{}", "- Include at least one number.".yellow());
     }
     if !has_symbol(password) {
-        println!("{}", "- Include at least one special character (e.g., !@#$%^&*).".yellow());
+        println!(
+            "{}",
+            "- Include at least one special character (e.g., !@#$%^&*).".yellow()
+        );
     }
 }
 
@@ -148,26 +199,33 @@ fn load_common_passwords(path: &str) -> HashSet<String> {
 
 fn main() {
     let args = Args::parse();
-    let password = &args.password;
-    println!("Received password: {}", password);
 
-    println!("--- Security Analysis ---");
-
-    let common_passwords = args.common.as_ref().map(|path| load_common_passwords(path));
-
-    if let Some(list) = common_passwords {
-        match list.contains(password) {
-            true => {
-                println!("{}", "⚠️ This password is too common!".red().bold());
-                print_strength_bar(0);
-            }
-            false => {
-                let score = score_password(password);
-                print_strength_bar(score);
-            }
+    match (&args.password, args.generate) {
+        (Some(_), true) => {
+            eprintln!(
+                "{}",
+                "❌ You can't provide a password and use --generate at the same time.".red()
+            );
+            std::process::exit(1);
         }
-    } else {
-        let score = score_password(password);
-        print_strength_bar(score);
+        (None, false) => {
+            eprintln!(
+                "{}",
+                "❌ Please provide a password or use --generate.".red()
+            );
+            std::process::exit(1);
+        }
+        (Some(password), false) => {
+            println!("Received password: {}", password);
+            println!("--- Security Analysis ---");
+            analyze(&password, &args.common);
+        }
+        (None, true) => {
+            let generated = generate_password(12);
+            println!("{}", "🔐 Generated secure password:".green().bold());
+            println!("{}", generated.blue().bold());
+            println!("--- Security Analysis ---");
+            analyze(&generated, &args.common);
+        }
     }
 }
