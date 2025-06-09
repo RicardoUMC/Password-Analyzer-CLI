@@ -3,6 +3,7 @@ use colored::*;
 use rand::prelude::*;
 use rand::rng;
 use regex::Regex;
+use std::process;
 use std::{
     collections::HashSet,
     fs::File,
@@ -206,14 +207,14 @@ fn main() {
                 "{}",
                 "❌ You can't provide a password and use --generate at the same time.".red()
             );
-            std::process::exit(1);
+            process::exit(1);
         }
         (None, false) => {
             eprintln!(
                 "{}",
                 "❌ Please provide a password or use --generate.".red()
             );
-            std::process::exit(1);
+            process::exit(1);
         }
         (Some(password), false) => {
             println!("Received password: {}", password);
