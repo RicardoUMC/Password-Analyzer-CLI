@@ -24,6 +24,9 @@ struct Args {
     generate: bool,
 }
 
+const DEFAULT_LENGTH: usize = 16;
+const MIN_LENGTH: usize = 10;
+
 fn has_upper(password: &str) -> bool {
     Regex::new(r"[A-Z]").unwrap().is_match(password)
 }
@@ -41,7 +44,7 @@ fn has_symbol(password: &str) -> bool {
 }
 
 fn valid_length(password: &str) -> bool {
-    password.len() >= 10
+    password.len() >= MIN_LENGTH
 }
 
 fn generate_password(length: usize) -> String {
@@ -126,7 +129,7 @@ fn score_password(password: &str) -> u8 {
     };
 
     println!();
-    println!("{} Valid length (>=10)", length);
+    println!("{} Valid length (>={})", length, MIN_LENGTH);
     println!("{} Has uppercase", upper);
     println!("{} Has lowercase", lower);
     println!("{} Has numbers", number);
@@ -143,7 +146,7 @@ fn print_suggestions(password: &str) {
     println!("\n{}", "Suggestions to improve your password:".yellow());
 
     if !valid_length(password) {
-        println!("{}", "- Make it at least 10 characters long.".yellow());
+        println!("{}", format!("- Make it at least {} characters long.", MIN_LENGTH).yellow());
     }
     if !has_upper(password) {
         println!("{}", "- Include at least one uppercase letter.".yellow());
@@ -222,7 +225,7 @@ fn main() {
             analyze(&password, &args.common);
         }
         (None, true) => {
-            let generated = generate_password(12);
+            let generated = generate_password(DEFAULT_LENGTH);
             println!("{}", "🔐 Generated secure password:".green().bold());
             println!("{}", generated.blue().bold());
             println!("--- Security Analysis ---");
