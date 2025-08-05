@@ -1,86 +1,86 @@
 # 🔐 Password Analyzer CLI
 
-Una herramienta de línea de comandos escrita en Rust que permite analizar la seguridad de contraseñas, generar contraseñas seguras y detectar si una contraseña es común (basado en wordlists).
+A command-line tool written in Rust that allows you to analyze password security, generate secure passwords, and detect if a password is common (based on wordlists).
 
-## 🚀 Funcionalidades
+## 🚀 Features
 
-- Verifica la fuerza de contraseñas dadas (longitud, caracteres especiales, etc.).
-- Detecta contraseñas que aparecen en archivos de contraseñas comunes (`wordlist.txt`).
-- Genera contraseñas seguras con los criterios más importantes.
-- Interfaz de línea de comandos amigable usando [`clap`](https://docs.rs/clap/).
-- Salida con colores y símbolos para visualización clara (requiere soporte ANSI).
+- Checks the strength of given passwords (length, special characters, etc.).
+- Detects passwords that appear in common password files (`wordlist.txt`).
+- Generates secure passwords with the most important criteria.
+- User-friendly command-line interface using [`clap`](https://docs.rs/clap/).
+- Output with colors and symbols for clear visualization (requires ANSI support).
 
-## 📦 Instalación
+## 📦 Installation
 
-1. Clona el repositorio:
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/RicardoUMC/Password-Analyzer-Cli.git
 cd Password-Analyzer-Cli
 ```
 
-2. Asegúrate de tener [Rust](https://www.rust-lang.org/tools/install) instalado.
+2. Make sure you have [Rust](https://www.rust-lang.org/tools/install) installed.
 
-3. Compila el proyecto:
+3. Build the project:
 
 ```bash
 cargo build --release
 ```
 
-## 🧪 Uso
+## 🧪 Usage
 
-### Analizar una contraseña
+### Analyze a password
 
 ```bash
-cargo run -- MiC0ntraseñaSegura!
+cargo run -- MySecureP@ssw0rd!
 ```
 
-### Generar una contraseña segura
+### Generate a secure password
 
 ```bash
 cargo run -- -g
 ```
 
-o usando la siguiente forma:
+or using the following form:
 
 ```bash
 cargo run -- --generate
 ```
 
-### Analizar contraseñas desde archivo
+### Analyze passwords from a file
 
-Supón que tienes una lista en `wordlist.txt` y deseas verificar si la contraseña está incluida:
+Suppose you have a list in `wordlist.txt` and want to check if the password is included:
 
 ```bash
 cargo run -- -c wordlist.txt "123456"
 ```
 
-o usando la forma larga de la opción:
+or using the long form of the option:
 
 ```bash
 cargo run -- -common wordlist.txt "123456"
 ```
 
-## 📁 Estructura del proyecto
+## 📁 Project Structure
 
-- `src/main.rs` – Punto de entrada principal del programa.
-- `src/cli/` – Módulo encargado de manejar la interfaz de línea de comandos y el procesamiento de argumentos.
-- `src/common/` – Módulo para la carga de contraseñas comunes (`wordlist.txt`).
-- `src/password/` – Módulo que contiene la lógica principal para el análisis y la generación de contraseñas.
-- `src/utils/` – Módulo con funciones auxiliares diversas como impresiones en pantalla.
-- `wordlist.txt` – Wordlist opcional de contraseñas comunes, carga tu propio archivo.
+- `src/main.rs` – Main entry point of the program.
+- `src/cli/` – Module responsible for handling the command-line interface and argument processing.
+- `src/common/` – Module for loading common passwords (`wordlist.txt`).
+- `src/password/` – Module containing the core logic for password analysis and generation.
+- `src/utils/` – Module with various auxiliary functions such as screen prints.
+- `wordlist.txt` – Optional wordlist of common passwords, upload your own file.
 
-## 🧱 Tecnologías utilizadas
+## 🧱 Technologies Used
 
 - Rust
 - [clap](https://crates.io/crates/clap) – CLI parsing
-- [regex](https://crates.io/crates/regex) – Validación de patrones
-- [colored](https://crates.io/crates/colored) – Colores en terminal
+- [regex](https://crates.io/crates/regex) – Pattern validation
+- [colored](https://crates.io/crates/colored) – Terminal colors
 
-## ✅ Ejemplos de salida
+## ✅ Output Examples
 
 ```bash
-Received password: MiC0ntraseñaSegura!
+Received password: MySecureP@ssw0rd!
 --- Security Analysis ---
 
 ✓ Valid length (>=10)
@@ -89,15 +89,15 @@ Received password: MiC0ntraseñaSegura!
 ✓ Has numbers
 ✓ Has symbols
 
-Passowrd strength: [■■■■■■■■■■] 100% (Strong)
+Password strength: [■■■■■■■■■■] 100% (Strong)
 ```
 
-## 📄 Licencia MIT
+## 📄 MIT License
 
-Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ---
 
-## ✨ Créditos
+## ✨ Credits
 
-Desarrollado por [Ricardo Mora](https://github.com/RicardoUMC).
+Developed by [Ricardo Mora](https://github.com/RicardoUMC).
