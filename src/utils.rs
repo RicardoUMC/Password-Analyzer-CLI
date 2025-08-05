@@ -17,10 +17,7 @@ pub fn print_suggestions(password: &str) {
         println!("{}", "- Include at least one number.".yellow());
     }
     if !has_symbol(password) {
-        println!(
-            "{}",
-            "- Include at least one special character (e.g., !@#$%^&*).".yellow()
-        );
+        println!( "{}", "- Include at least one special character (e.g., !@#$%^&*).".yellow());
     }
 }
 
