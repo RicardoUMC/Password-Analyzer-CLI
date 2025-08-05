@@ -26,28 +26,50 @@ pub fn valid_length(password: &str) -> bool {
     password.len() >= MIN_LENGTH
 }
 
-pub fn score_password(password: &str) -> u8 {
+fn score_password(password: &str) -> u8 {
     let mut score: u8 = 0;
 
-    if valid_length(password) {
+    let length = if valid_length(password) {
         score += 1;
-    }
+        "✓".green()
+    } else {
+        "✘".red()
+    };
 
-    if has_upper(password) {
+    let upper = if has_upper(password) {
         score += 1;
-    }
+        "✓".green()
+    } else {
+        "✘".red()
+    };
 
-    if has_lower(password) {
+    let lower = if has_lower(password) {
         score += 1;
-    }
+        "✓".green()
+    } else {
+        "✘".red()
+    };
 
-    if has_number(password) {
+    let number = if has_number(password) {
         score += 1;
-    }
+        "✓".green()
+    } else {
+        "✘".red()
+    };
 
-    if has_symbol(password) {
+    let symbol = if has_symbol(password) {
         score += 1;
-    }
+        "✓".green()
+    } else {
+        "✘".red()
+    };
+
+    println!();
+    println!("{} Valid length (>={})", length, MIN_LENGTH);
+    println!("{} Has uppercase", upper);
+    println!("{} Has lowercase", lower);
+    println!("{} Has numbers", number);
+    println!("{} Has symbols", symbol);
 
     if score < 5 {
         print_suggestions(password);
