@@ -13,4 +13,3 @@ pub struct Args {
     #[arg(short, long, help = "Generate a strong password instead")]
     pub generate: bool,
 }
-

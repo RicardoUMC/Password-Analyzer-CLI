@@ -1,5 +1,7 @@
+use crate::password::analysis::{
+    MIN_LENGTH, has_lower, has_number, has_symbol, has_upper, valid_length,
+};
 use colored::Colorize;
-use crate::password::analysis::{has_lower, has_number, has_symbol, has_upper, valid_length, MIN_LENGTH};
 
 pub fn print_suggestions(password: &str) {
     println!("\n{}", "Suggestions to improve your password:".yellow());
@@ -45,4 +47,3 @@ pub fn print_strength_bar(score: u8) {
         color_bar, percentage, label
     );
 }
-

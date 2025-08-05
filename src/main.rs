@@ -3,7 +3,7 @@ use colored::Colorize;
 use std::process;
 
 use passcheck::cli::args::Args;
-use passcheck::password::analysis::{analyze, DEFAULT_LENGTH};
+use passcheck::password::analysis::{DEFAULT_LENGTH, analyze};
 use passcheck::password::generate::generate_password;
 
 fn main() {
