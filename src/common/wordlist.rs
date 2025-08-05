@@ -14,4 +14,3 @@ pub fn load_common_passwords(path: &str) -> HashSet<String> {
         .map(|line| line.trim().to_string())
         .collect()
 }
-

@@ -2,13 +2,9 @@ use clap::Parser;
 use colored::Colorize;
 use std::process;
 
-mod cli;
-mod common;
-mod password;
-mod utils;
-
-use crate::cli::Args;
-use crate::password::*;
+use passcheck::cli::args::Args;
+use passcheck::password::analysis::{analyze, DEFAULT_LENGTH};
+use passcheck::password::generate::generate_password;
 
 fn main() {
     let args = Args::parse();
