@@ -1,5 +1,5 @@
 use clap::Parser;
-use colored::*;
+use colored::Colorize;
 use std::process;
 
 mod cli;

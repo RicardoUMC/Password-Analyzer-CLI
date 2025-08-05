@@ -1,5 +1,5 @@
 use colored::Colorize;
-use rand::prelude::*;
+use rand::seq::{IndexedRandom, SliceRandom};
 use regex::Regex;
 
 use crate::{common::load_common_passwords, utils::*};

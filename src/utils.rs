@@ -1,5 +1,6 @@
-use colored::*;
-use crate::password::*;
+use colored::Colorize;
+
+use crate::password::{has_lower, has_number, has_symbol, has_upper, valid_length, MIN_LENGTH};
 
 pub fn print_suggestions(password: &str) {
     println!("\n{}", "Suggestions to improve your password:".yellow());
