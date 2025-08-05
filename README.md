@@ -92,7 +92,7 @@ Received password: MiC0ntraseñaSegura!
 Passowrd strength: [■■■■■■■■■■] 100% (Strong)
 ```
 
-## 📄 Licencia
+## 📄 Licencia MIT
 
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
